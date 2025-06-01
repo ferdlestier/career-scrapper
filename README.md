@@ -1,11 +1,10 @@
 # GitHub Careers Germany Job Notifier
 
-A command-line tool that scrapes [GitHub Careers Jobs](https://www.github.careers/careers-home/jobs) and notifies you via Signal when there's a new open role in Germany.
+A command-line tool that scrapes [GitHub Careers Germany Jobs](https://www.github.careers/careers-home/jobs?page=1&locations=,,Germany) and notifies you via Signal when there's a new open role in Germany.
 
 ## Features
 
-- Scrapes GitHub Careers for job postings
-- Filters for roles located in Germany
+- Scrapes GitHub Careers for job postings in Germany
 - Sends notifications via Signal messenger
 - Remembers notified jobs to avoid duplicates
 - Easy CLI usage
@@ -68,6 +67,16 @@ Edit `config.json`:
 
 - `signal_number`: The phone number (with +countrycode) you registered with signal-cli
 - `recipients`: List of recipient numbers (with +countrycode)
+
+Example:
+```json
+{
+    "signal_number": "+491234567890",
+    "recipients": [
+        "+491111111111"
+    ]
+}
+```
 
 ### 6. Run the app
 
