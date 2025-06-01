@@ -4,12 +4,10 @@ import json
 import subprocess
 import os
 import sys
-from datetime import datetime
-from typing import List, Dict
 
 CONFIG_FILE = "config.json"
 DATA_FILE = "notified_jobs.json"
-CAREERS_URL = "https://www.github.careers/careers-home/jobs"
+CAREERS_URL = "https://www.github.careers/careers-home/jobs?page=1&locations=,,Germany"
 
 def load_config():
     with open(CONFIG_FILE, "r") as f:
@@ -25,7 +23,7 @@ def save_notified_jobs(job_ids):
     with open(DATA_FILE, "w") as f:
         json.dump(list(job_ids), f)
 
-def fetch_jobs() -> List[Dict]:
+def fetch_jobs():
     resp = requests.get(CAREERS_URL)
     resp.raise_for_status()
     soup = BeautifulSoup(resp.text, "html.parser")
@@ -39,7 +37,6 @@ def fetch_jobs() -> List[Dict]:
         title = title_tag.text.strip()
         location = location_tag.text.strip()
         link = link_tag["href"]
-        # Use link as unique id
         jobs.append({
             "id": link,
             "title": title,
@@ -47,9 +44,6 @@ def fetch_jobs() -> List[Dict]:
             "link": link
         })
     return jobs
-
-def filter_germany_jobs(jobs):
-    return [job for job in jobs if "germany" in job["location"].lower() or "deutschland" in job["location"].lower()]
 
 def send_signal_message(signal_number, recipients, message):
     for recipient in recipients:
@@ -66,8 +60,7 @@ def main():
     config = load_config()
     notified_jobs = load_notified_jobs()
     jobs = fetch_jobs()
-    de_jobs = filter_germany_jobs(jobs)
-    new_jobs = [job for job in de_jobs if job["id"] not in notified_jobs]
+    new_jobs = [job for job in jobs if job["id"] not in notified_jobs]
     if not new_jobs:
         print("No new jobs in Germany found.")
         return
