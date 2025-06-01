@@ -1,6 +1,6 @@
 {
-    "signal_number": "+491234567890",
+    "signal_number": "${{ secrets.SIGNAL_NUMBER }}",
     "recipients": [
-        "+491111111111"
+        "${{ secrets.RECIPIENT_NUMBER }}"
     ]
 }
